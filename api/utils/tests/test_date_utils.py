@@ -105,3 +105,28 @@ class DateUtilsTest(APITestCase):
         year, period = sns.get_previous_period(date)
 
         self.assertEqual(str(date.year - (period == '2')), year)
+
+     # D1.Condição 1 Verdadeiro
+    def test_data_nula(self):
+        resultado = sns.get_current_year_and_period(None)
+        self.assertEqual(len(resultado), 2) 
+        self.assertTrue(resultado[0].isdigit())
+        self.assertEqual(resultado[1], "1")
+
+    # D2.Condição_1 F, D2.Condição_2 V 
+    def test_fora_intervalo_antes(self):
+        date = datetime(2025, 4, 1)
+        resultado = sns.get_current_year_and_period(date)
+        self.assertEqual(resultado, ["2025", "1"])  
+
+    # D2.Condição_1 V, D2.Condição_2 V
+    def test_inicio_intervalo(self):
+        date = datetime(2025, 5, 2)
+        resultado = sns.get_current_year_and_period(date)
+        self.assertEqual(resultado, ["2025", "2"])  
+
+    # D2.Condição_1 V, D2.Condição_2 F
+    def test_fora_intervalo_depois(self):
+        date = datetime(2025, 1, 2)
+        resultado = sns.get_current_year_and_period(date)
+        self.assertEqual(resultado, ["2025", "1"])  
